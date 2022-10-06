@@ -1,5 +1,5 @@
 ---
 config:
   clients:
-    - url: http://loki-gateway.minio-tenant-1.svc.cluster.local/loki/api/v1/push
+    - url: http://loki-gateway.default.svc.cluster.local/loki/api/v1/push
       tenant_id: "1"
