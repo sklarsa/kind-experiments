@@ -1,0 +1,22 @@
+minio:
+  enabled: true
+  replicas: 1
+  drivesPerNode: 2
+  rootUser: enterprise-logs
+  rootPassword: supersecret
+  buckets:
+    - name: chunks
+      policy: none
+      purge: false
+    - name: ruler
+      policy: none
+      purge: false
+    - name: admin
+      policy: none
+      purge: false
+  persistence:
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
