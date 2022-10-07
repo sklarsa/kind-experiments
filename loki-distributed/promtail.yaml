@@ -1,5 +1,9 @@
 ---
 config:
   clients:
-    - url: http://loki-gateway.default.svc.cluster.local/loki/api/v1/push
-      tenant_id: "1"
+    - url: http://loki-gateway.logging.svc.cluster.local/loki/api/v1/push
+  snippets:
+    pipelineStages:
+      - cri: {}
+      - tenant:
+          source: namespace
