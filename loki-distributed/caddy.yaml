@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy
+  namespace: logging
+spec:
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+      - name: caddy
+        image: caddy
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: caddyfile
+          mountPath: /etc/caddy
+      volumes:
+        - name: caddyfile
+          configMap:
+            name: caddy
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddy
+  namespace: logging
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: caddy
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy
+  namespace: logging
+data:
+  Caddyfile: |
+    {
+      auto_https off
+    }
+    :80 {
+      reverse_proxy loki-gateway.logging.svc.cluster.local:80
+      basicauth /* {
+        myuser $2a$14$6jcZZWmjUE3yBtHlFbnKDO8pe3ZeE47NnZXSSezsxap2E4K5nkScG  # mypassword
+      }
+    }

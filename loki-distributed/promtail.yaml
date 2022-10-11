@@ -1,7 +1,10 @@
 ---
 config:
   clients:
-    - url: http://loki-gateway.logging.svc.cluster.local/loki/api/v1/push
+    - url: http://caddy.logging.svc.cluster.local/loki/api/v1/push
+      basic_auth:
+        username: myuser
+        password: mypassword
   snippets:
     pipelineStages:
       - cri: {}
